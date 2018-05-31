@@ -109,7 +109,7 @@ class App extends Component {
         <div className="pv2" />
 
         <img alt={this.getMBTI()} src={`https://storage.googleapis.com/neris/public/images/headers/${this.getMBTI()}-personality-type-header.png`} />
-        {mbtiPrediction && <p>You should join the {utils.upperCaseFirst(mbtiPrediction)} team!</p>}
+        {mbtiPrediction && <p>Your personality is similar to those on the {utils.upperCaseFirst(mbtiPrediction)} team!</p>}
 
         <Slider
           leftLabel={`Extraverted (E): ${mbti.e}%`}
