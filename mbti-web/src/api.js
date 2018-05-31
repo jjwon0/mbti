@@ -2,7 +2,6 @@ const getServerUrl = (url) => {
   if (window.__ENV__ === 'production') {
     return `https://cryptic-earth-76295.herokuapp.com${url}`;
   }
-  return `https://cryptic-earth-76295.herokuapp.com${url}`;
 
   return `http://localhost:5000${url}`;
 }
@@ -20,4 +19,19 @@ export const fetchMBTIClassification = (classifier, mbti) => {
   })
     .then(response => response.json())
     .then(json => json.mbti)
+}
+
+
+export const fetchMBTIClusters = (numClusters) => {
+  return fetch(getServerUrl(`/clusters`), {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      numClusters,
+    }),
+  })
+    .then(response => response.json())
+    .then(json => json.clusters)
 }

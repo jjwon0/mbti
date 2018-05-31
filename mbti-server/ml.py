@@ -1,5 +1,6 @@
 import csv
 from sklearn.linear_model import LogisticRegression
+from sklearn.cluster import KMeans
 
 
 MBTI_LETTERS = 'IESNFTJP'
@@ -9,6 +10,18 @@ CLASSIFIERS = {
     'bucket': None,
     'building': None,
 }
+
+
+def convert_featurized_mbti_to_mbti_type(mbti_featurized):
+    mbti = ''
+
+    for i in range(0, len(MBTI_LETTERS), 2):
+        if mbti_featurized[i] > mbti_featurized[i + 1]:
+            mbti += MBTI_LETTERS[i]
+        else:
+            mbti += MBTI_LETTERS[i + 1]
+
+    return mbti
 
 
 def featurize_mbti_type(mbti):
@@ -148,3 +161,18 @@ def classify_bucket(mbti):
 
 def classify_building(mbti):
     return classify('building', featurize_mbti_breakdown(mbti))
+
+
+def get_clusters(num_clusters):
+    data = get_dicts_from_csv(DATA_FILENAME)
+
+    # We're just looking for MBTI features, labels don't matter
+    features, _ = get_bucket_dataset(data)
+
+    kmeans = KMeans(n_clusters=num_clusters)
+    kmeans.fit(features)
+
+    return [
+        convert_featurized_mbti_to_mbti_type(cluster_center)
+        for cluster_center in kmeans.cluster_centers_
+    ]

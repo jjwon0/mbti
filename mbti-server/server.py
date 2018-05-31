@@ -10,6 +10,7 @@ from ml import (
     classify_bucket,
     classify_building,
     featurize_mbti_type,
+    get_clusters,
 )
 
 
@@ -42,4 +43,16 @@ def classify(classifier):
 
     return jsonify({
         'mbti': classification,
+    })
+
+
+@app.route('/clusters', methods=['POST'])
+def clusters():
+    """Returns the MBTI of different cluster centroids."""
+
+    request_json = request.get_json()
+    clusters = get_clusters(request_json['numClusters'])
+
+    return jsonify({
+        'clusters': clusters,
     })

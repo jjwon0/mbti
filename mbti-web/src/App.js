@@ -16,6 +16,8 @@ class Slider extends Component {
     const {
       leftLabel,
       rightLabel,
+      min,
+      max,
       value,
     } = this.props;
     return (
@@ -24,7 +26,7 @@ class Slider extends Component {
           <label>{leftLabel}</label>
           <label>{rightLabel}</label>
         </div>
-        <Rheostat onValuesUpdated={this.onChange} values={[value]} />
+        <Rheostat onValuesUpdated={this.onChange} min={min} max={max} values={[value]} />
       </div>
     );
   }
@@ -45,6 +47,9 @@ class App extends Component {
       'p': 50,
     },
     requesting: false,
+    tab: 'predictor',
+    numClusters: 5,
+    clusters: [],
   }
 
   handleMBTIChange = (category, rightValue) => {
@@ -76,27 +81,34 @@ class App extends Component {
   }
 
   classify = (classifier) => {
-    this.setState({
-      requesting: true,
-    });
-
     API.fetchMBTIClassification(classifier, this.state.mbti).then(mbti => this.setState({
       mbtiPrediction: mbti,
       requesting: false,
     }));
   }
 
-  render() {
+  cluster = (numClusters) => {
+    this.setState({
+      requesting: true,
+    });
+
+    API.fetchMBTIClusters(numClusters).then(clusters => this.setState({
+      clusters,
+      requesting: false,
+    }))
+  }
+
+  renderPredictorTab() {
     const { mbti, mbtiPrediction, requesting } = this.state;
 
     return (
-      <div className="pa4 mw6 center">
-        <h1>Color Team Predictor</h1>
+      <div>
+        <h3>Predictor</h3>
         <p>Enter your MBTI, and we'll suggest a team for you based on it!</p>
 
         <div className="pv2" />
 
-        <img src={`https://storage.googleapis.com/neris/public/images/headers/${this.getMBTI()}-personality-type-header.png`} />
+        <img alt={this.getMBTI()} src={`https://storage.googleapis.com/neris/public/images/headers/${this.getMBTI()}-personality-type-header.png`} />
         {mbtiPrediction && <p>You should join the {utils.upperCaseFirst(mbtiPrediction)} team!</p>}
 
         <Slider
@@ -130,6 +142,80 @@ class App extends Component {
         >
           Predict
         </button>
+      </div>
+    );
+  }
+
+  renderClustersTab() {
+    const { clusters, numClusters, requesting } = this.state;
+
+    return (
+      <div>
+        <h3>Clusters</h3>
+        <p>If we cluster people based on their personality type, what would the personality types of these clusters be?</p>
+
+        <div className="pv2" />
+
+        <Slider
+          leftLabel="0"
+          rightLabel="10"
+          min={0}
+          max={10}
+          value={numClusters}
+          onChange={(value) =>     this.setState({
+            numClusters: value,
+          })}
+        />
+
+        <button
+          className="fw5 pointer no-underline br-pill ph3 pv2 mb2 dib white bg-dark-blue bn"
+          onClick={() => this.cluster(numClusters)} disabled={requesting}
+        >
+          Get MBTI types of {numClusters} clusters
+        </button>
+
+        <div className="pv2" />
+
+        {clusters.length > 0 &&
+          clusters.map(cluster =>
+            <img alt={cluster} src={`https://storage.googleapis.com/neris/public/images/headers/${cluster.toLowerCase()}-personality-type-header.png`} />
+          )
+        }
+      </div>
+    );
+  }
+
+  renderMethodologyTab() {
+    return (
+      <div>
+        <h3>Methodology</h3>
+        <p className="lh-copy">
+          Prediction is done using linear regression, and clustering is done with k-means.
+        </p>
+        <p className="lh-copy">
+          You can find the data used <a href="https://docs.google.com/spreadsheets/d/1JeCx31YuboKmA3-rKsTt9WeyK7KfsbXJgY9dla_HLXk/edit#gid=0">here</a>. A copy of the data on the first sheet is downloaded and lives on the server. People were bucketed into larger teams to make predictions a bit more accurate.
+        </p>
+        <p className="lh-copy">
+          The code lives on Github <a href="https://github.com/jjwon0/mbti/">here</a>.
+        </p>
+      </div>
+    );
+  }
+
+  render() {
+    const { tab } = this.state;
+
+    return (
+      <div className="pa4 mw6 center">
+        <h1>Color MBTI</h1>
+        <ul className="pl0 pb4">
+          <li className="dark-blue pointer dim dib mr2" onClick={() => this.setState({tab: 'predictor'})}>Predictor</li>
+          <li className="dark-blue pointer dim dib mr2" onClick={() => this.setState({tab: 'clusters'})}>Clusters</li>
+          <li className="dark-blue pointer dim dib mr2" onClick={() => this.setState({tab: 'methodology'})}>Methodology</li>
+        </ul>
+        {tab === 'predictor' && this.renderPredictorTab()}
+        {tab === 'clusters' && this.renderClustersTab()}
+        {tab === 'methodology' && this.renderMethodologyTab()}
       </div>
     );
   }
