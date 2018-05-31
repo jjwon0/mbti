@@ -193,8 +193,15 @@ class App extends Component {
           Prediction is done using linear regression, and clustering is done with k-means.
         </p>
         <p className="lh-copy">
-          You can find the data used <a href="https://docs.google.com/spreadsheets/d/1JeCx31YuboKmA3-rKsTt9WeyK7KfsbXJgY9dla_HLXk/edit#gid=0">here</a>. A copy of the data on the first sheet is downloaded and lives on the server. People were bucketed into larger teams to make predictions a bit more accurate.
+          You can find the data used <a href="https://docs.google.com/spreadsheets/d/1JeCx31YuboKmA3-rKsTt9WeyK7KfsbXJgY9dla_HLXk/edit#gid=0">here</a>. A copy of the data on the first sheet is downloaded and lives on the server. People were bucketed into larger teams to make predictions a bit more accurate. The teams are:
         </p>
+        <ul>
+          <li>Eng</li>
+          <li>Product (product + design)</li>
+          <li>Science (lab + content + other science-y people)</li>
+          <li>Support (support + gc)</li>
+          <li>Bizops</li>
+        </ul>
         <p className="lh-copy">
           The code lives on Github <a href="https://github.com/jjwon0/mbti/">here</a>.
         </p>
