@@ -152,7 +152,10 @@ class App extends Component {
     return (
       <div>
         <h3>Clusters</h3>
-        <p>If we cluster people based on their personality type, what would the personality types of these clusters be?</p>
+
+        <p className="lh-copy">If we grouped people into <i>n</i> groups based on their personality types, what would the average personality types of these groups be?</p>
+
+        <p className="lh-copy">Try to guess what teams these might reflect 🤔</p>
 
         <div className="pv2" />
 
