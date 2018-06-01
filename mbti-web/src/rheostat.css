@@ -27,7 +27,7 @@
   cursor: pointer;
 }
 
-.rheostat-handle:active {
+.rheostat-handle:active, .rheostat-handle:focus {
   background-color: #ddd;
 }
 
