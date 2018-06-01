@@ -198,7 +198,7 @@ class App extends Component {
         <p className="lh-copy">
           You can find the data used <a href="https://docs.google.com/spreadsheets/d/1JeCx31YuboKmA3-rKsTt9WeyK7KfsbXJgY9dla_HLXk/edit#gid=0">here</a>. A copy of the data on the first sheet is downloaded and lives on the server. People were bucketed into larger teams to make predictions a bit more accurate. The teams are:
         </p>
-        <ul>
+        <ul className="lh-copy">
           <li>Eng</li>
           <li>Product (product + design)</li>
           <li>Science (lab + content + other science-y people)</li>
